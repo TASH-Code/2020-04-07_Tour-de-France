@@ -12,7 +12,7 @@ tdf_winners <- readr::read_csv('https://raw.githubusercontent.com/rfordatascienc
 
 dat=data.frame(table(tdf_winners$winner_team,tdf_winners$winner_name))  #Count the number of victories by team and cyclist
 dat1=dat[dat$Freq >= 1, ]                                               # Select those with at least one victory
-dat2 <- transform(dat1,id=as.numeric(factor(Var1)))                     #  Convert the categories into numbers. Not used
+dat2 <- transform(dat1,id=as.numeric(factor(Var1)))                     #  Convert the categories into numbers. 
 
 
 ###########################
@@ -20,7 +20,7 @@ dat2 <- transform(dat1,id=as.numeric(factor(Var1)))                     #  Conve
 ###########################
 
 treeMapPlot <- ggplot(dat2, aes(area = Freq,
-                              fill = factor(as.character(Var1)),
+                              fill = factor(id),
                               label=Var2, 
                               subgroup=Var1)) +
       geom_treemap(aes(alpha = Freq)) +                                 # Creates the gradient based on the number of victories.              
