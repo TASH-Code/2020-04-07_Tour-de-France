@@ -1,0 +1,41 @@
+rm(list=ls())
+
+library(ggplot2)
+library(treemapify)
+
+# setwd("C:/Users/Datasets/titdytuesday/08_04_2020_TourFrance") #Define the working path
+
+#Import Data
+tdf_winners <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-07/tdf_winners.csv')
+
+
+
+dat=data.frame(table(tdf_winners$winner_team,tdf_winners$winner_name))  #Count the number of victories by team and cyclist
+dat1=dat[dat$Freq >= 1, ]                                               # Select those with at least one victory
+dat2 <- transform(dat1,id=as.numeric(factor(Var1)))                     #  Convert the categories into numbers. Not used
+
+
+###########################
+#   Plot the graph        #
+###########################
+
+treeMapPlot <- ggplot(dat2, aes(area = Freq,
+                              fill = factor(as.character(Var1)),
+                              label=Var2, 
+                              subgroup=Var1)) +
+      geom_treemap(aes(alpha = Freq)) +                                 # Creates the gradient based on the number of victories.              
+      geom_treemap_subgroup_border(colour = "white") +
+      geom_treemap_text(fontface = "italic",
+                        colour = "white",
+                        place = "centre",
+                        grow = F,
+                        reflow = T) +
+      geom_treemap_subgroup_text(place = "centre",
+                                 grow = T,
+                                 alpha = 0.5,
+                                 colour = "#FAFAFA",
+                                 min.size = 0)
+
+treeMapPlot
+
+#ggsave("Tour.png")   # Save the plot
